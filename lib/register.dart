@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'db_access.dart';
+
+// Form validation : https://docs.flutter.dev/cookbook/forms/validation
+
 class RegisterPage extends StatefulWidget {
   const RegisterPage();
 
@@ -13,6 +17,15 @@ class _RegisterPageState extends State<RegisterPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
   final _passwordRepeatedController = TextEditingController();
+  final DatabaseHelper _dbHelper = DatabaseHelper();
+
+  void _addUser() async {
+    User user = User(
+        username: _usernameController.text,
+        email: _emailController.text,
+        password: _passwordController.text);
+    await _dbHelper.addUser(user);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -136,8 +149,9 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   onPressed: () {
                     if (_formKey.currentState!.validate()) {
+                      _addUser();
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Processing Data')),
+                          const SnackBar(content: Text('Processing Data'))
                       );
                       Navigator.of(context).pushNamed('/home');
                       // Navigator.pop(context);
