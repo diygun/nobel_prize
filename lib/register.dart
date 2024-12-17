@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:nobel_prize/routegenerator.dart';
 
-
 class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
