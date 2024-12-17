@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nobel_prize/main.dart';
 import 'package:nobel_prize/register.dart';
 
 import 'home.dart';

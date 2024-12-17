@@ -1,12 +1,91 @@
 import 'package:flutter/material.dart';
-import 'package:nobel_prize/routegenerator.dart';
 
 class RegisterPage extends StatelessWidget {
+  final _emailController = TextEditingController();
+  final _usernameController = TextEditingController();
+  final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: SafeArea(
+        child: ListView(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          children: <Widget>[
+            const SizedBox(height: 80.0),
+            Column(
+              children: <Widget>[
+                Text('Nobel Prize', style: TextStyle(fontSize: 60)),
+              ],
+            ),
+            const SizedBox(height: 120.0),
+            TextField(
+              controller: _usernameController,
+              decoration: const InputDecoration(
+                labelText: 'Username',
+              ),
+            ),
+            const SizedBox(height: 120.0),
+            TextField(
+              controller: _emailController,
+              decoration: const InputDecoration(
+                labelText: 'Email',
+              ),
+            ),
+            const SizedBox(height: 12.0),
+            TextField(
+              controller: _passwordController,
+              decoration: const InputDecoration(
+                  labelText: 'Password'
+              ),
+              obscureText: true,
+            ),
+            OverflowBar(alignment: MainAxisAlignment.start, children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: TextButton(
+                  child: const Text("Login",
+                      style: TextStyle(color: Colors.green)),
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                ),
+              )
+            ]),
+            OverflowBar(
+              alignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextButton(
+                    child: const Text("RESET FORM",
+                        style: TextStyle(color: Colors.red)),
+                    onPressed: () {
+                      _usernameController.clear();
+                      _passwordController.clear();
+                    },
+                  ),
+                ),
+                ElevatedButton(
+                  child: const Text(
+                    'NEXT',
+                    style: TextStyle(color: Colors.deepPurple),
+                  ),
+                  onPressed: () {
+                    Navigator.of(context).pushNamed('/home');
+                    // Navigator.pop(context);
+                  },
+                ),
+              ],
+            )
+          ],
+        ),
+      ),
+    );
+
+    return Scaffold(
       appBar: AppBar(
-        title: Text('Register'),
+        title: Text('Login'),
       ),
       body: Center(
         child: Column(
@@ -19,8 +98,8 @@ class RegisterPage extends StatelessWidget {
             ElevatedButton(
               child: Text('Go to second'),
               onPressed: () {
-                Navigator.of(context).pushNamed('/second', arguments: 'hello from the first page');
-
+                Navigator.of(context).pushNamed('/second',
+                    arguments: 'hello from the first page');
 
                 // Pushing a route directly, WITHOUT using a named route
                 // Navigator.of(context).push(
@@ -31,8 +110,6 @@ class RegisterPage extends StatelessWidget {
                 //         SecondPage(data: 'Hello there from the first page!'),
                 //   ),
                 // );
-
-
               },
             )
           ],
@@ -41,3 +118,40 @@ class RegisterPage extends StatelessWidget {
     );
   }
 }
+//
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Login'),
+//       ),
+//       body: SafeArea(
+//         child: Container(
+//           child: Column(
+//             mainAxisSize: MainAxisSize.min,
+//             children: <Widget>[
+//               Text(
+//                 'Register form',
+//                 style: TextStyle(fontSize: 50),
+//               ),
+//               ElevatedButton(
+//                 child: Text('Se deconnecter'),
+//                 onPressed: () {
+//                   Navigator.of(context).pushNamed('/');
+//
+//                   // Pushing a route directly, WITHOUT using a named route
+//                   // Navigator.of(context).push(
+//                   //   // With MaterialPageRoute, you can pass data between pages,
+//                   //   // but if you have a more complex app, you will quickly get lost.
+//                   //   MaterialPageRoute(
+//                   //     builder: (context) =>
+//                   //         SecondPage(data: 'Hello there from the first page!'),
+//                   //   ),
+//                   // );
+//                 },
+//               )
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }

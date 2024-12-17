@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:nobel_prize/routegenerator.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -47,6 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                       style: TextStyle(color: Colors.green)),
                   onPressed: () {
                     Navigator.of(context).pushNamed('/register');
+                    // Navigator.of(context).pop();
                   },
                 ),
               )
