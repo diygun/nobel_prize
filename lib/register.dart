@@ -1,44 +1,107 @@
 import 'package:flutter/material.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
+  const RegisterPage();
+
+  @override
+  State<RegisterPage> createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  final _passwordRepeatedController = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
+        body: SafeArea(
+      child: Form(
+        key: _formKey,
         child: ListView(
           padding: const EdgeInsets.symmetric(horizontal: 24.0),
           children: <Widget>[
             const SizedBox(height: 80.0),
             Column(
               children: <Widget>[
-                Text('Nobel Prize', style: TextStyle(fontSize: 60)),
+                Text('Nobel Prize', style: TextStyle(fontSize: 50)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: Text('Register', style: TextStyle(fontSize: 20)),
+                ),
               ],
             ),
-            const SizedBox(height: 120.0),
-            TextField(
+            // const SizedBox(height: 120.0),
+            TextFormField(
               controller: _usernameController,
               decoration: const InputDecoration(
                 labelText: 'Username',
               ),
+              autofocus: true,
+              autovalidateMode: AutovalidateMode.onUnfocus,
+              textInputAction: TextInputAction.next,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a username';
+                }
+                return null;
+              },
             ),
-            const SizedBox(height: 120.0),
-            TextField(
+
+            // const SizedBox(height: 120.0),
+            TextFormField(
               controller: _emailController,
               decoration: const InputDecoration(
                 labelText: 'Email',
               ),
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.emailAddress,
+              autovalidateMode: AutovalidateMode.onUnfocus,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter an email';
+                }
+                final emailRegex = RegExp(r'^[^@]+@[^@]+\.[^@]+');
+                if (!emailRegex.hasMatch(value)) {
+                  return 'Please enter a valid email';
+                }
+                return null;
+              },
             ),
-            const SizedBox(height: 12.0),
-            TextField(
+            // const SizedBox(height: 12.0),
+            TextFormField(
               controller: _passwordController,
               decoration: const InputDecoration(
-                  labelText: 'Password'
+                labelText: 'Password',
               ),
+              textInputAction: TextInputAction.next,
+              autovalidateMode: AutovalidateMode.onUnfocus,
               obscureText: true,
+              validator: (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter a password';
+                }
+                return null;
+              },
+            ),
+            TextFormField(
+              controller: _passwordRepeatedController,
+              decoration: const InputDecoration(
+                labelText: 'Repeat Password',
+              ),
+              textInputAction: TextInputAction.next,
+              autovalidateMode: AutovalidateMode.onUnfocus,
+              obscureText: true,
+              validator: (value) {
+                if (value == null ||
+                    value.isEmpty ||
+                    value != _passwordController.text) {
+                  return 'Please enter a password';
+                }
+                return null;
+              },
             ),
             OverflowBar(alignment: MainAxisAlignment.start, children: <Widget>[
               Padding(
@@ -68,90 +131,24 @@ class RegisterPage extends StatelessWidget {
                 ),
                 ElevatedButton(
                   child: const Text(
-                    'NEXT',
+                    'REGISTER',
                     style: TextStyle(color: Colors.deepPurple),
                   ),
                   onPressed: () {
-                    Navigator.of(context).pushNamed('/home');
-                    // Navigator.pop(context);
+                    if (_formKey.currentState!.validate()) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('Processing Data')),
+                      );
+                      Navigator.of(context).pushNamed('/home');
+                      // Navigator.pop(context);
+                    }
                   },
                 ),
               ],
-            )
-          ],
-        ),
-      ),
-    );
-
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: <Widget>[
-            Text(
-              'First Page',
-              style: TextStyle(fontSize: 50),
             ),
-            ElevatedButton(
-              child: Text('Go to second'),
-              onPressed: () {
-                Navigator.of(context).pushNamed('/second',
-                    arguments: 'hello from the first page');
-
-                // Pushing a route directly, WITHOUT using a named route
-                // Navigator.of(context).push(
-                //   // With MaterialPageRoute, you can pass data between pages,
-                //   // but if you have a more complex app, you will quickly get lost.
-                //   MaterialPageRoute(
-                //     builder: (context) =>
-                //         SecondPage(data: 'Hello there from the first page!'),
-                //   ),
-                // );
-              },
-            )
           ],
         ),
       ),
-    );
+    ));
   }
 }
-//
-//     return Scaffold(
-//       appBar: AppBar(
-//         title: Text('Login'),
-//       ),
-//       body: SafeArea(
-//         child: Container(
-//           child: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: <Widget>[
-//               Text(
-//                 'Register form',
-//                 style: TextStyle(fontSize: 50),
-//               ),
-//               ElevatedButton(
-//                 child: Text('Se deconnecter'),
-//                 onPressed: () {
-//                   Navigator.of(context).pushNamed('/');
-//
-//                   // Pushing a route directly, WITHOUT using a named route
-//                   // Navigator.of(context).push(
-//                   //   // With MaterialPageRoute, you can pass data between pages,
-//                   //   // but if you have a more complex app, you will quickly get lost.
-//                   //   MaterialPageRoute(
-//                   //     builder: (context) =>
-//                   //         SecondPage(data: 'Hello there from the first page!'),
-//                   //   ),
-//                   // );
-//                 },
-//               )
-//             ],
-//           ),
-//         ),
-//       ),
-//     );
-//   }
-// }

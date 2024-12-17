@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:nobel_prize/register.dart';
-
 import 'home.dart';
 import 'login.dart';
 
@@ -13,7 +12,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => LoginPage());
 
       case '/register':
-        return MaterialPageRoute(builder: (_) => RegisterPage());
+        return MaterialPageRoute<void>(
+          builder: (BuildContext context) => const RegisterPage(),
+        );
 
       case '/home':
         return MaterialPageRoute(builder: (_) => HomePage());
@@ -21,7 +22,7 @@ class RouteGenerator {
       case '/example-with-args':
         if (args is String) {
           return MaterialPageRoute(
-            builder: (_) => RegisterPage(
+            builder: (_) => LoginPage(
                 // data: args,
                 ),
           );

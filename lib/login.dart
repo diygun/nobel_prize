@@ -10,6 +10,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,17 +21,21 @@ class _LoginPageState extends State<LoginPage> {
             const SizedBox(height: 80.0),
             Column(
               children: <Widget>[
-                Text('Nobel Prize', style: TextStyle(fontSize: 60)),
+                Text('Nobel Prize', style: TextStyle(fontSize: 50)),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
+                  child: Text('Login', style: TextStyle(fontSize: 20)),
+                ),
               ],
             ),
-            const SizedBox(height: 120.0),
+            // const SizedBox(height: 120.0),
             TextField(
               controller: _usernameController,
               decoration: const InputDecoration(
                 labelText: 'Username',
               ),
             ),
-            const SizedBox(height: 12.0),
+            // const SizedBox(height: 12.0),
             TextField(
               controller: _passwordController,
               decoration: const InputDecoration(labelText: 'Password'),
@@ -76,7 +81,20 @@ class _LoginPageState extends State<LoginPage> {
                   },
                 ),
               ],
-            )
+            ),
+            PopScope<Object?>(
+              canPop: false,
+              onPopInvokedWithResult: (bool didPop, Object? result) async {
+                if (didPop) {
+                  return;
+                }
+                final bool shouldPop = await _showBackDialog() ?? false;
+                if (context.mounted && shouldPop) {
+                  Navigator.pop(context);
+                }
+              },
+              child: Text(''),
+            ),
           ],
         ),
       ),
@@ -114,6 +132,40 @@ class _LoginPageState extends State<LoginPage> {
           ],
         ),
       ),
+    );
+  }
+
+  Future<bool?> _showBackDialog() {
+    return showDialog<bool>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Quitter Nobel Prize?'),
+          content: const Text(
+            'Voulez-vous vraiment quitter Nobel Prize?',
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Annuler'),
+              onPressed: () {
+                Navigator.pop(context, false);
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Quitter', style: TextStyle(color: Colors.red)),
+              onPressed: () {
+                Navigator.pop(context, true);
+              },
+            ),
+          ],
+        );
+      },
     );
   }
 }
