@@ -66,6 +66,11 @@ class DatabaseHelper {
       whereArgs: [user.username],
     );
 
+    // print all current data inside the table
+    final List<Map<String, dynamic>> allUsers = await db.query('users');
+    print("Before adding user");
+    print(allUsers);
+
     if (existingUsers.isNotEmpty) {
       // User already exists
       return AddUser.FAIL;
@@ -78,8 +83,10 @@ class DatabaseHelper {
     );
 
     // print all current data inside the table
-    final List<Map<String, dynamic>> allUsers = await db.query('users');
-    print(allUsers);
+    final List<Map<String, dynamic>> allUsersAfter = await db.query('users');
+    print("After adding user");
+    print(allUsersAfter);
+
     return AddUser.SUCESS;
   }
 
@@ -91,7 +98,35 @@ class DatabaseHelper {
       where: 'username = ? AND password = ?',
       whereArgs: [username, password],
     );
-
+    print(result.isNotEmpty);
     return result.isNotEmpty;
+    // print all current data inside the table
+    final List<Map<String, dynamic>> allUsers = await db.query('users');
+    print(allUsers);
+    if (result.isEmpty) {
+      print("NO");
+      return false;
+    }
+    if(result[0]['username'].toString().toLowerCase() == username.toString().toLowerCase()){
+      print("OK");
+      return true;
+    } else {
+      print("NO");
+      return false;
+    }
   }
+
+  // Function to clear the database
+  Future<void> clearDatabase() async {
+    final db = await database;
+    await db.delete('users');
+  }
+
+  // Function to show the database
+  Future<void> showDatabase() async {
+    final db = await database;
+    final List<Map<String, dynamic>> allUsers = await db.query('users');
+    print(allUsers);
+  }
+
 }

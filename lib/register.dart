@@ -3,6 +3,14 @@ import 'package:flutter/material.dart';
 import 'db_access.dart';
 
 // Form validation : https://docs.flutter.dev/cookbook/forms/validation
+// For validation 3 STEPS :
+// 1. Form with key: _formKey,
+// 2. TextFormField with validator: (value) { if (statment) {},
+// 3. onPressed: () { if (_formKey.currentState!.validate()) {}}.
+
+
+
+
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage();
@@ -10,6 +18,8 @@ class RegisterPage extends StatefulWidget {
   @override
   State<RegisterPage> createState() => _RegisterPageState();
 }
+
+enum AddUser { SUCCESS, FAIL }
 
 class _RegisterPageState extends State<RegisterPage> {
   final _formKey = GlobalKey<FormState>();
@@ -19,13 +29,21 @@ class _RegisterPageState extends State<RegisterPage> {
   final _passwordRepeatedController = TextEditingController();
   final DatabaseHelper _dbHelper = DatabaseHelper();
 
-  void _addUser() async {
+  Future<AddUser> _addUser() async {
     User user = User(
-        username: _usernameController.text,
-        email: _emailController.text,
-        password: _passwordController.text);
-    await _dbHelper.addUser(user);
+      username: _usernameController.text,
+      email: _emailController.text,
+      password: _passwordController.text,
+    );
+
+    try {
+      await _dbHelper.addUser(user);
+      return AddUser.SUCCESS;
+    } catch (e) {
+      return AddUser.FAIL;
+    }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -139,6 +157,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     onPressed: () {
                       _usernameController.clear();
                       _passwordController.clear();
+                      _emailController.clear();
+                      _passwordRepeatedController.clear();
                     },
                   ),
                 ),
@@ -147,14 +167,19 @@ class _RegisterPageState extends State<RegisterPage> {
                     'REGISTER',
                     style: TextStyle(color: Colors.deepPurple),
                   ),
-                  onPressed: () {
+                  onPressed: () async {
                     if (_formKey.currentState!.validate()) {
-                      _addUser();
-                      ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Processing Data'))
-                      );
-                      Navigator.of(context).pushNamed('/home');
-                      // Navigator.pop(context);
+                      if (await _addUser() == AddUser.SUCCESS) {
+                        print('User added successfully');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                                content: Text('User added successfully!')));
+                        Navigator.of(context).pushNamed('/home');
+                      } else {
+                        print('User not added');
+                        ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(content: Text('Error adding user', style: TextStyle(color: Colors.red))));
+                      }
                     }
                   },
                 ),
